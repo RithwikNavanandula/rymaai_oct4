@@ -1,0 +1,79 @@
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AppShell } from '@/components/layout/AppShell';
+import { useHealthCheck } from '@/api/hooks/useDetections';
+import { Suspense, lazy, useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+
+// Lazy load pages (per improvement plan - Phase 3 Performance)
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const Analytics = lazy(() => import('@/pages/Analytics'));
+const Inventory = lazy(() => import('@/pages/Inventory'));
+const Faces = lazy(() => import('@/pages/Faces'));
+const Scanner = lazy(() => import('@/pages/Scanner'));
+const Trucks = lazy(() => import('@/pages/Trucks'));
+const Compression = lazy(() => import('@/pages/Compression'));
+const VideoAnalysis = lazy(() => import('@/pages/VideoAnalysis'));
+const Cameras = lazy(() => import('@/pages/Cameras'));
+const Settings = lazy(() => import('@/pages/Settings'));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      refetchOnWindowFocus: false,
+      staleTime: 5000,
+    },
+  },
+});
+
+function PageLoader() {
+  return (
+    <div className="p-6 space-y-6">
+      <Skeleton className="h-10 w-64" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32" />)}
+      </div>
+      <Skeleton className="h-96" />
+    </div>
+  );
+}
+
+function HealthChecker({ children }: { children: React.ReactNode }) {
+  useHealthCheck();
+  return <>{children}</>;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<AppShell />}>
+        <Route index element={<Suspense fallback={<PageLoader />}><Dashboard /></Suspense>} />
+        <Route path="video-analysis" element={<Suspense fallback={<PageLoader />}><VideoAnalysis /></Suspense>} />
+        <Route path="analytics" element={<Suspense fallback={<PageLoader />}><Analytics /></Suspense>} />
+        <Route path="inventory" element={<Suspense fallback={<PageLoader />}><Inventory /></Suspense>} />
+        <Route path="faces" element={<Suspense fallback={<PageLoader />}><Faces /></Suspense>} />
+        <Route path="scanner" element={<Suspense fallback={<PageLoader />}><Scanner /></Suspense>} />
+        <Route path="trucks" element={<Suspense fallback={<PageLoader />}><Trucks /></Suspense>} />
+        <Route path="compression" element={<Suspense fallback={<PageLoader />}><Compression /></Suspense>} />
+        <Route path="video-analysis" element={<Suspense fallback={<PageLoader />}><VideoAnalysis /></Suspense>} />
+        <Route path="cameras" element={<Suspense fallback={<PageLoader />}><Cameras /></Suspense>} />
+        <Route path="settings" element={<Suspense fallback={<PageLoader />}><Settings /></Suspense>} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default function App() {
+  useEffect(() => { document.title = 'AI CCTV | v3'; }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <HealthChecker>
+          <AppRoutes />
+        </HealthChecker>
+      </HashRouter>
+    </QueryClientProvider>
+  );
+}

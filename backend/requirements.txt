@@ -1,0 +1,45 @@
+# ============================================================
+# AI CCTV Backend — Requirements
+# ============================================================
+
+# Web framework
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Async WSGI server (low-latency MJPEG streaming + concurrent requests)
+gevent>=24.0.0
+
+
+# Authentication
+pyjwt>=2.8.0
+
+# Password hashing (bundled with flask via werkzeug, listed explicitly)
+werkzeug>=3.0.0
+
+# Computer vision
+opencv-python>=4.9.0
+
+# Numerical computing
+numpy>=1.26.0
+
+# ML — YOLO (optional but required for detection features)
+ultralytics>=8.0.0
+
+# Deep learning backend for YOLO (choose one based on your hardware)
+# CPU only:
+torch>=2.2.0
+torchvision>=0.17.0
+# GPU (CUDA) — uncomment and replace above two lines if using GPU:
+# torch>=2.2.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+# torchvision>=0.17.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+
+# Barcode scanning (optional)
+pyzbar>=0.1.9
+
+# OCR — label scanning (optional, requires system tesseract: sudo apt install tesseract-ocr)
+pytesseract>=0.3.10
+pillow>=10.0.0
+
+# Report generation
+reportlab>=4.0.0
+openpyxl>=3.1.0

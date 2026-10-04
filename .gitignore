@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Models & Large Files
+models/
+*.pt
+*.onnx
+*.mp4
+*.avi
+header.png
+backend/models/
+backend/video_storage/
+backend/scans/
+
+# Database (contains real data — do not commit)
+*.db
+*.sqlite3
+
+# Uploaded files & face images
+backend/uploads/
+backend/faces/
+backend/static/faces/
+
+# Node
+node_modules/
+dist/
+.DS_Store
+
+*.log
